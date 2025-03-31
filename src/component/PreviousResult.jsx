@@ -1,13 +1,17 @@
 import React from "react";
 import { useState } from "react";
+import { useAppContext } from "../context/AppContext";
 import PoolCard from "./PoolCard";
 
 const PreviousResult = ({ previousPools }) => {
+  const { user } = useAppContext();
   const [visiblePools, setVisiblePools] = useState(4);
 
   const handleLoadMore = () => {
     setVisiblePools((prev) => prev + 4);
   };
+
+  if (!user.isConnected) return null;
 
   return (
     <div>

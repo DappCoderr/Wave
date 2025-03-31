@@ -48,7 +48,7 @@ function AppContent() {
 
   return (
     <div className="min-h-screen bg-white">
-      <WalletError walletError={walletError} />
+      {walletError && <WalletError walletError={walletError} />}
       <Header />
       <MainContent
         timeRemaining={timeRemaining}
@@ -62,6 +62,7 @@ function AppContent() {
 }
 
 function MainContent({ timeRemaining, formatTime, previousPools }) {
+  const { user } = useAppContext();
   return (
     <main className="container mx-auto px-4 py-8 space-y-8">
       <LivePoolCard
@@ -72,7 +73,7 @@ function MainContent({ timeRemaining, formatTime, previousPools }) {
 
       <PreviousResult previousPools={previousPools} />
 
-      <Leaderboard userAddr={"0x323e80d6db9b41db"} />
+      <Leaderboard userAddr={user.address} />
     </main>
   );
 }

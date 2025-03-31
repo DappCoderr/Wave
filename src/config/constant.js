@@ -1,4 +1,3 @@
-// config/constants.js
 export const TICKET_PRICE = 10;
 export const INITIAL_TIME = 24 * 60 * 60;
 export const DUMMY_POOL_DATA = {

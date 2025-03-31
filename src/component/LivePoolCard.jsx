@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useAppContext } from "../context/AppContext";
 
 const LivePoolCard = ({ poolData, timeRemaining, formatTime }) => {
@@ -52,10 +51,10 @@ const LivePoolCard = ({ poolData, timeRemaining, formatTime }) => {
             <span className="text-gray-700 font-medium">Your tickets:</span>
             <div className="flex gap-4">
               <span className="text-gray-900">
-                Heads: {user.tickets.filter((t) => t.side === "heads").length}
+                Heads: {user.tickets.filter((t) => t.side === "Head").length}
               </span>
               <span className="text-gray-900">
-                Tails: {user.tickets.filter((t) => t.side === "tails").length}
+                Tails: {user.tickets.filter((t) => t.side === "Tail").length}
               </span>
             </div>
           </div>
@@ -69,13 +68,13 @@ const LivePoolCard = ({ poolData, timeRemaining, formatTime }) => {
             key={side}
             className="border border-gray-200 rounded-lg p-4 relative"
           >
-            {user.tickets.some((t) => t.side === side) && (
+            {user.tickets.some((t) => t.side === "Head") && (
               <div className="absolute top-2 right-2 bg-gray-900 text-white text-xs px-2 py-1 rounded-full">
-                {user.tickets.filter((t) => t.side === side).length}
+                {user.tickets.filter((t) => t.side === "Head").length}
               </div>
             )}
             <h3 className="text-lg font-medium text-gray-900 mb-2 uppercase">
-              {side}
+              {side} Vault
             </h3>
             <div className="space-y-1">
               <div className="flex justify-between text-gray-600">
@@ -83,11 +82,11 @@ const LivePoolCard = ({ poolData, timeRemaining, formatTime }) => {
                 <span className="font-medium">{poolData[side].share}</span>
               </div>
               <div className="flex justify-between text-gray-600">
-                <span>Bets</span>
+                <span>Flow Stake</span>
                 <span className="font-medium">{poolData[side].bets}</span>
               </div>
               <div className="flex justify-between text-gray-600">
-                <span>Staked</span>
+                <span>Total Staked</span>
                 <span className="font-medium">{poolData[side].staked}</span>
               </div>
             </div>
@@ -129,7 +128,7 @@ const LivePoolCard = ({ poolData, timeRemaining, formatTime }) => {
           onClick={handleBuyClick}
           className="w-full py-3 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors font-medium"
         >
-          Buy Ticket (0.1 ETH)
+          Make a Bet
         </button>
       )}
 

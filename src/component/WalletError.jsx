@@ -1,8 +1,12 @@
-import React from "react";
+import { useAppContext } from "../context/AppContext";
 
-const WalletError = ({ walletError }) => {
+const WalletError = () => {
+  const { walletError } = useAppContext();
+
+  if (!walletError) return null;
+
   return (
-    <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
+    <div className="animate-fade-in bg-red-100 border-l-4 border-red-500 text-red-700 p-4 animate-fade-in">
       <div className="flex justify-center items-center">
         <p>{walletError}</p>
       </div>

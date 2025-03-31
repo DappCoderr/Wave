@@ -2,8 +2,7 @@ import { useState } from "react";
 import { useAppContext } from "../context/AppContext";
 
 const Header = () => {
-  const { user, connectWallet, disconnectWallet, setWalletError } =
-    useAppContext();
+  const { user, connectWallet, disconnectWallet } = useAppContext();
   const [showDisconnectMenu, setShowDisconnectMenu] = useState(false);
 
   const handleCopyAddress = () => {
@@ -17,7 +16,7 @@ const Header = () => {
 
   return (
     <header className="flex items-center justify-between px-6 py-4 bg-gray-900">
-      <h1 className="text-2xl font-bold text-white">FlipFortunes</h1>
+      <h1 className="text-2xl font-bold text-white">wave.money</h1>
 
       <div className="relative">
         <button

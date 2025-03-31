@@ -1,5 +1,4 @@
-// contexts/AppContext.jsx
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useRef } from "react";
 
 const AppContext = createContext();
 
@@ -10,10 +9,26 @@ export function AppProvider({ children }) {
     tickets: [],
   });
   const [walletError, setWalletError] = useState("");
+
+  const errorTimeout = useRef(null);
+
   const [modal, setModal] = useState({
     show: false,
     type: "",
   });
+
+  const setTemporaryError = (message) => {
+    if (errorTimeout.current) {
+      clearTimeout(errorTimeout.current);
+    }
+
+    setWalletError(message);
+
+    errorTimeout.current = setTimeout(() => {
+      setWalletError("");
+      errorTimeout.current = null;
+    }, 2000);
+  };
 
   const connectWallet = () => {
     const dummyAddress = `0x${Array(20)
@@ -54,7 +69,7 @@ export function AppProvider({ children }) {
         setModal,
         connectWallet,
         disconnectWallet,
-        setWalletError,
+        setWalletError: setTemporaryError,
       }}
     >
       {children}
