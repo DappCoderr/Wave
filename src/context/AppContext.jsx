@@ -1,15 +1,18 @@
-import { createContext, useState, useContext, useRef } from "react";
+import { createContext, useState, useContext, useEffect, useRef } from "react";
+import { useCurrentFlowUser } from "@onflow/kit";
 
 const AppContext = createContext();
 
 export function AppProvider({ children }) {
+  const { user: flowUser, authenticate, unauthenticate } = useCurrentFlowUser();
+
   const [user, setUser] = useState({
     isConnected: false,
     address: "",
     tickets: [],
   });
-  const [walletError, setWalletError] = useState("");
 
+  const [walletError, setWalletError] = useState("");
   const errorTimeout = useRef(null);
 
   const [modal, setModal] = useState({
@@ -30,26 +33,29 @@ export function AppProvider({ children }) {
     }, 2000);
   };
 
-  const connectWallet = () => {
-    const dummyAddress = `0x${Array(20)
-      .fill()
-      .map(() => Math.floor(Math.random() * 16).toString(16))
-      .join("")}`;
-    setUser({
-      isConnected: true,
-      address: dummyAddress,
-      tickets: [],
-    });
-    setWalletError("");
+  const connectWallet = async () => {
+    try {
+      await authenticate();
+      setWalletError("");
+    } catch (error) {
+      console.error(error);
+      setTemporaryError("Failed to connect wallet.");
+    }
   };
 
-  const disconnectWallet = () => {
-    setUser({
-      isConnected: false,
-      address: "",
-      tickets: [],
-    });
-    setModal({ show: false, type: "" });
+  const disconnectWallet = async () => {
+    try {
+      await unauthenticate();
+      setUser({
+        isConnected: false,
+        address: "",
+        tickets: [],
+      });
+      setModal({ show: false, type: "" });
+    } catch (error) {
+      console.error(error);
+      setTemporaryError("Failed to disconnect wallet.");
+    }
   };
 
   const addTickets = (tickets) => {
@@ -58,6 +64,22 @@ export function AppProvider({ children }) {
       tickets: [...prev.tickets, ...tickets],
     }));
   };
+
+  useEffect(() => {
+    if (flowUser?.addr) {
+      setUser((prev) => ({
+        ...prev,
+        isConnected: true,
+        address: flowUser.addr,
+      }));
+    } else {
+      setUser((prev) => ({
+        ...prev,
+        isConnected: false,
+        address: "",
+      }));
+    }
+  }, [flowUser]);
 
   return (
     <AppContext.Provider

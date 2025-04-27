@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAppContext } from "../context/AppContext";
 
 const Header = () => {
   const { user, connectWallet, disconnectWallet } = useAppContext();
   const [showDisconnectMenu, setShowDisconnectMenu] = useState(false);
+
+  useEffect(() => {
+    console.log("The Address: ", user.address);
+  }, [user]);
 
   const handleCopyAddress = () => {
     navigator.clipboard.writeText(user.address);
@@ -42,7 +46,7 @@ const Header = () => {
                 />
               </svg>
               <span className="text-sm font-mono">
-                {`${user.address.slice(0, 6)}...${user.address.slice(-4)}`}
+                {`${user?.address?.slice(0, 6)}...${user?.address?.slice(-4)}`}
               </span>
             </>
           ) : (
